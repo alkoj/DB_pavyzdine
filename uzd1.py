@@ -1,20 +1,5 @@
- # # 1Isrinkite duomenis apie darbuotoja (asmens koda, varda ir pavarde) is lentelés DARBUOTOJAS
- # kurle butu gime 1988m liepos 20a.
- # - 2.Isrinkite visus duomenis apie darbuotoius
- # is lenteles DARBUOlUJAs, kurle yra gime iki 1988m
- # liepos 29d
- # - 3. Isrinkite duomenis apie darbuotojus (dirba nuo kada ir gimimo metus) is lenteles
- # DARBUOTOJAS, Kurle butu sidarbine nuo 20uym spallo sua 1k1 2012m Lapkr1C10 Ila.
- # - 4. Isrinkite duomenis apie darbuotojus (varda, Skyriu ir Projekto ID)
- # is lentelés DARBUOTOJAS
- # kurie dirba 2 ir 3 proiektuose. (Panaudoti IN operatoriu).
- # - 5. Isrinkite duomenis (varda, pavarde ir asmens koda) apie visas moteris is lentelés DARBUOTOJAS
- # (panaudojant operatoriu uKE) •
- # - 6. Isrinkite visus duomenis apie visus darbuotojus is lentelés DARBUOTOJAS, kurie yra gime 12
- # diena (panaudojant operatoriu LIKE).
- # - T.iörinkite visus projektus is lentelés PROJEKTAS kad projekto pavadinime 3 raide bütu 'u'.
 import sqlite3
-
+import csv
 def select_command(komanda):
     conn = sqlite3.connect('Pavyzdine.db')
     c = conn.cursor()
@@ -72,3 +57,28 @@ if __name__ == '__main__':
         select_command("""SELECT *
                              FROM PROJEKTAS
                              WHERE pavadinimas LIKE '__u%';""")
+
+        # Подключение к базе данных
+        connection = sqlite3.connect('Pavyzdine.db')
+        cursor = connection.cursor()
+
+        # Получение данных из таблицы (замените 'ваша_таблица' на фактическое имя таблицы)
+        cursor.execute("SELECT * FROM DARBUOTOJAS")
+        data = cursor.fetchall()
+
+         # Создание CSV файла
+        with open('select.csv', mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+
+            # Запись заголовков (проверьте, чтобы названия соответствовали колонкам в таблице)
+            writer.writerow(
+                ['ASMENSKODAS', 'VARDAS', 'PAVARDE', 'DIRBANUO', 'GIMIMOMETAI', 'PAREJGOS', 'SKYRIUS_PAVADINIMAS',
+                 'PROJEKTAS_ID', 'DEPARTAMENTAS_ID', 'ATLYGINIMAS'])
+
+            # Запись данных
+            writer.writerows(data)
+
+        # Закрытие соединения
+        connection.close()
+        print()
+
